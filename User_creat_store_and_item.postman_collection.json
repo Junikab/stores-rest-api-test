@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "a7868397-032a-4d8e-be09-de9eab5d3b2a",
+		"name": "User_creat_store_and_item",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register and Authenticate Copy",
+			"item": [
+				{
+					"name": "/register Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5287e741-a94c-411d-a66b-fc9fda985d93",
+								"exec": [
+									"postman.clearEnvironmentVariable(\"access_token\");",
+									"",
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"User created successfully.\"] = jsonData.message === \"User created successfully.\";",
+									"",
+									"tests[\"Content-Type is presense in response\"] = postman.getResponseHeader(\"Content-Type\");",
+									"",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\" : \"user9\",\n\"password\": \"abcd1\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/register"
+					},
+					"response": []
+				},
+				{
+					"name": "/auth Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6c78a112-45e3-4a55-979f-180847cce42f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"postman.setEnvironmentVariable(\"access_token\", jsonData.access_token);",
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"tests[\"Body contains access_token\"] = responseBody.has(\"access_token\");",
+									"",
+									"tests[\"Response time is less than 150ms\"] = responseTime <150;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\" : \"user9\",\n\"password\": \"abcd1\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/auth"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name> Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/store/<name>"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/<name> Copy",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "JWT",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"test\",\n\t\"price\": 15.99,\n\t\"store_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/item/<name>"
+					},
+					"response": []
+				},
+				{
+					"name": "/stores Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "18abe117-963d-4dea-afb7-caa2bcd0b0a9",
+								"exec": [
+									"tests[\"Status code id 200\"] = responseCode.code === 200;",
+									"",
+									"tests[\"response time less than 150ms\"] = responseTime < 150;",
+									"",
+									"tests[\"Body contains stores\"] = responseBody.has(\"stores\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{url}}/stores"
+					},
+					"response": []
+				},
+				{
+					"name": "/item/my_item Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e24d4a33-2441-435b-a060-9c564dfeb0da",
+								"exec": [
+									"tests[\"Response time is less than 200ms\"] = responseTime < 200;",
+									"",
+									"tests[\"Response time is less than 150ms\"] = responseTime <150;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Item deleted\"] = jsonData.message === \"Item deleted\";",
+									"",
+									"tests[\"Content-Type is presense in response\"] = postman.getResponseHeader(\"Content-Type\");",
+									"",
+									"tests[\"Content-Type is application/json\"] = postman.getResponseHeader(\"Content-Type\") === \"application/json\";"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/item/my_item"
+					},
+					"response": []
+				},
+				{
+					"name": "/store/<name> Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{url}}/store/<name>"
+					},
+					"response": []
+				}
+			],
+			"description": "Test whether a user can Register and Authenticate successfully",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a8733676-0128-47d1-a02c-0aadc2d0558b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6e181daf-50c4-4e42-8dbd-05f19c9181d0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
